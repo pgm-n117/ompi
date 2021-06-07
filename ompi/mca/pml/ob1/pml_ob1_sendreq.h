@@ -384,6 +384,10 @@ mca_pml_ob1_send_request_start_btl( mca_pml_ob1_send_request_t* sendreq,
     mca_btl_base_module_t* btl = bml_btl->btl;
     size_t eager_limit = btl->btl_eager_limit - sizeof(mca_pml_ob1_hdr_t);
     int rc;
+    /*******************TESTING CODE - EAGER SEND SIZE LIMIT**********************/
+    printf("EAGER LIMIT: %u\n", eager_limit);     
+
+    /***********************************************************************************************/
 
 #if OPAL_CUDA_GDR_SUPPORT
     if (btl->btl_cuda_eager_limit && (sendreq->req_send.req_base.req_convertor.flags & CONVERTOR_CUDA)) {
@@ -414,6 +418,10 @@ mca_pml_ob1_send_request_start_btl( mca_pml_ob1_send_request_t* sendreq,
         size = eager_limit;
         if(OPAL_UNLIKELY(btl->btl_rndv_eager_limit < eager_limit))
             size = btl->btl_rndv_eager_limit;
+            /*******************TESTING CODE - EAGER SEND SIZE LIMIT**********************/
+            printf("RDMA/RNDV LIMIT: %u\n", size);     
+
+            /***********************************************************************************************/
         if(sendreq->req_send.req_send_mode == MCA_PML_BASE_SEND_BUFFERED) {
             rc = mca_pml_ob1_send_request_start_buffered(sendreq, bml_btl, size);
         } else if

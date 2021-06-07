@@ -1095,18 +1095,27 @@ static int mca_btl_tcp_component_exchange(void)
                      current_addr++;
                  } else
 #endif
-                 if ((AF_INET == my_ss.ss_family) &&
-                     (4 != mca_btl_tcp_component.tcp_disable_family)) {
-                     memcpy(&addrs[current_addr].addr_inet,
-                             &((struct sockaddr_in*)&my_ss)->sin_addr,
-                             sizeof(addrs[0].addr_inet));
-                     addrs[current_addr].addr_port =
-                         mca_btl_tcp_component.tcp_listen_port;
+                 if ((AF_INET == my_ss.ss_family) && (4 != mca_btl_tcp_component.tcp_disable_family)) {
+                     
+                     memcpy(&addrs[current_addr].addr_inet, &((struct sockaddr_in*)&my_ss)->sin_addr, sizeof(addrs[0].addr_inet));
+                     addrs[current_addr].addr_port = mca_btl_tcp_component.tcp_listen_port;
                      addrs[current_addr].addr_family = MCA_BTL_TCP_AF_INET;
                      xfer_size += sizeof (mca_btl_tcp_addr_t);
                      addrs[current_addr].addr_inuse   = 0;
-                     addrs[current_addr].addr_ifkindex =
-                         opal_ifindextokindex (index);
+                     addrs[current_addr].addr_ifkindex = opal_ifindextokindex (index);
+                     
+                     //TESTING CODE-KNOW ADDRESSING INFORMATION OF PROCESSES
+                     char *destination=NULL;
+    
+                     destination = malloc(INET_ADDRSTRLEN);
+ 
+                     inet_ntop(AF_INET, &addrs[current_addr].addr_inet, destination, INET_ADDRSTRLEN);
+                     printf("ADDRESSING INFORMATION - ENDPOINT AVAILABLE IN: %s:%u\n",
+                        destination, ntohs(addrs[current_addr].addr_port = mca_btl_tcp_component.tcp_listen_port));     
+ 
+                     free(destination);
+                     //------------------------------------------------------
+                     
                      current_addr++;
                  }
              } /* end of for opal_ifbegin() */

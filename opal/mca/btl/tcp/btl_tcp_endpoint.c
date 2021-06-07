@@ -327,6 +327,19 @@ int mca_btl_tcp_endpoint_send(mca_btl_base_endpoint_t* btl_endpoint, mca_btl_tcp
     int rc = OPAL_SUCCESS;
 
     OPAL_THREAD_LOCK(&btl_endpoint->endpoint_send_lock);
+    /*******************TESTING CODE - OBTAINING ENDPOINT IP ADDRESS AND PORT**********************/
+    /*ADD BYTES SENT IF POSSIBLE, COULD BE INTERESTING -> SHOULD BE AS LARGE AS BTL_MAX_RDMA_SIZE?*/
+    char *destination=NULL;
+    
+    destination = malloc(INET_ADDRSTRLEN);
+
+    inet_ntop(AF_INET, &(btl_endpoint->endpoint_addr->addr_inet), destination, INET_ADDRSTRLEN);
+    printf("Destination: %s:%u\n",destination, ntohs(btl_endpoint->endpoint_addr->addr_port));     
+
+    free(destination);
+     
+     
+    /***********************************************************************************************/
     switch(btl_endpoint->endpoint_state) {
     case MCA_BTL_TCP_CONNECTING:
     case MCA_BTL_TCP_CONNECT_ACK:

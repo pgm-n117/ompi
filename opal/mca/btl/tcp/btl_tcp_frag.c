@@ -118,6 +118,10 @@ bool mca_btl_tcp_frag_send(mca_btl_tcp_frag_t* frag, int sd)
     /* non-blocking write, but continue if interrupted */
     while(cnt < 0) {
         cnt = writev(sd, frag->iov_ptr, frag->iov_cnt);
+        /*******************TESTING CODE - WRITTEN BYTES ON SOCKET DESCRIPTOR**********************/
+        printf("\t Bytes sent: %ld\n",cnt);     
+
+        /***********************************************************************************************/
         if(cnt < 0) {
             switch(opal_socket_errno) {
             case EINTR:
